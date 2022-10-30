@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: Artistic-1.0
 pragma solidity ^0.8.17;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "./CowLib.sol";
-
 /*
  _________________________________________
 < I don't know why I did this, send help. >
@@ -14,6 +11,10 @@ import "./CowLib.sol";
         U  ||----w |
            ||     ||
 */
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "./CowLib.sol";
+
 
 /// @title Cowsay.sol
 /// @author Originally developed by Tony Monroe, ported to Solidity by @wattsyart (wattsyart@protonmail.com)
