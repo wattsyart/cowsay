@@ -211,21 +211,35 @@ library CowLib {
                 continue;
             }
 
+            
             if(started) {          
                 if(line.equals(p.end)) return cow.toString();
 
+                bool hasReplacements = true;
+
+                while(hasReplacements)
                 {
+                    hasReplacements = false;
                     bool success;
                     strings.slice memory replaced;                
                 
                     (success, replaced) = tryReplacePart(line.copy(), p.thoughts, p.thoughtsToken);
-                    if(success) line = replaced;
+                    if(success) {
+                        line = replaced;
+                        hasReplacements = true;
+                    }
 
                     (success, replaced) = tryReplacePart(line.copy(), p.eyes, p.eyesToken);
-                    if(success) line = replaced;
+                    if(success) {
+                        line = replaced;
+                        hasReplacements = true;
+                    }
 
                     (success, replaced) = tryReplacePart(line.copy(), p.tongue, p.tongueToken);
-                    if(success) line = replaced;
+                    if(success) {
+                        line = replaced;
+                        hasReplacements = true;
+                    }
                 }
 
                 strings.slice[] memory parts;
