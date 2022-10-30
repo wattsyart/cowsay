@@ -1,6 +1,17 @@
 // SPDX-License-Identifier: Artistic-1.0
 pragma solidity ^0.8.17;
 
+/*
+ _________________________________________
+< I don't know why I did this, send help. >
+ -----------------------------------------
+    \  ^__^
+     \ (**)\_______
+       (__)\       )\/\
+        U  ||----w |
+           ||     ||
+*/
+
 import "./lib/strings.sol";
 
 library CowLib {
@@ -52,6 +63,17 @@ library CowLib {
         Custom
     }
 
+    /// @notice Options for cow processing
+    /// @param wordWrap If true, words are wrapped along @maxLineLength; if false, @newLine in the input are relied on
+    /// @param maxLineLength Sets the breakpoint for lines when @wordWrap is true
+    /// @param cowType Used to flag whether to use the default cow or to parse a custom cow from @cowFile     
+    /// @param cowFile Must contain the custom cowfile template when @cowType is Custom
+    /// @param faceType Used to flag whether to use a templated default face, or a custom face from @face
+    /// @param face Must contain the face configuration when @faceType is Custom
+    /// @param bubbleType Used to flag whether to use a templated default speech bubble, or a custom bubble from @bubble
+    /// @param bubble Must contain the bubble configuration when @bubbleType is Custom
+    /// @param newLine The type of new lines to emit and parse. Default should be `\n`. Better to normalize on this than to change it.
+    /// @param emptyText The value to use for the speech output when no input is provided
     struct Options {
         bool wordWrap;
         uint maxLineLength;
