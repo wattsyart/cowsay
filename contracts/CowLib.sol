@@ -202,7 +202,7 @@ library CowLib {
                     (success, replaced) = tryReplacePart(line.copy(), p.eyes, p.eyesToken);
                     if(success) line = replaced;
 
-                    (success, replaced) = tryReplacePart(line.copy(), p.tongue, p.eyesToken);
+                    (success, replaced) = tryReplacePart(line.copy(), p.tongue, p.tongueToken);
                     if(success) line = replaced;
                 }
 
@@ -248,9 +248,9 @@ library CowLib {
             face.eyes = "$$";            
         } else if (faceType ==  FaceType.Paranoid) {
             face.eyes = "@@";
-        } else if (faceType ==  FaceType.Stoned) {
-            face.tongue = "U ";
+        } else if (faceType ==  FaceType.Stoned) {            
             face.eyes = "**";
+            face.tongue = "U ";
         } else if (faceType ==  FaceType.Tired) {
             face.eyes = "--";
         } else if (faceType ==  FaceType.Wired) {
