@@ -17,7 +17,7 @@ import "./lib/strings.sol";
 library CowLib {
 
     using CowLib for *;
-    using strings for *;
+    using strings for *;    
     
     enum FaceType {
         Default,
@@ -92,6 +92,58 @@ library CowLib {
         string firstLine;        
         uint firstLineLength;
         string newLine;
+    }
+
+    struct CowMap {
+        string[] names;
+        string[] values;
+        mapping(string => uint) indices;
+    }
+
+    function length(CowMap storage map) internal view returns (uint256) {
+        return map.values.length;
+    }
+
+    function add(CowMap storage map, string memory name, string memory value) internal returns (bool) {
+        if (map.indices[name] == 0) {
+            map.names.push(name);
+            map.values.push(value);
+            map.indices[name] = map.values.length;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function get(CowMap storage map, string memory name) internal view returns (string memory) {
+        uint index = map.indices[name] - 1;
+        return map.values[index];
+    }
+
+    function getNames(CowMap storage map) internal view returns (string[] memory) {
+        return map.names;
+    }
+
+    function remove(CowMap storage map, string memory name) internal returns (bool) {
+        uint256 index = map.indices[name];
+        if (index != 0) {
+            uint256 deleteAt = index - 1;
+            uint256 last = map.values.length - 1;
+            if (last != deleteAt) {
+                string memory lastName = map.names[last];                
+                string memory lastValue = map.values[last];
+                
+                map.names[deleteAt] = lastName;
+                map.values[deleteAt] = lastValue;
+                map.indices[lastValue] = index;
+            }
+            map.values.pop();
+            map.names.pop();
+            delete map.indices[name];            
+            return true;
+        } else {
+            return false;
+        }
     }
 
     function drawBubble(string memory input, Options memory options) internal pure returns (string memory) {

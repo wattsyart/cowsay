@@ -30,12 +30,17 @@ describe("Cowsay", function () {
     const { cowsay } = await loadFixture(deployFixture);        
     await testCustomCow(cowsay, "squirrel");
     await testCustomCow(cowsay, "three-eyes");
-  });
+    console.log(await cowsay.getCows());
+    });
 });
 
 async function testCustomCow(cowsay, cowName) {
   const cowFile = fs.readFileSync(`./test/cows/${cowName}.cow`, 'utf8');
-  await cowsay.setCow(cowName, cowFile);
+  await cowsay.addCowfile(cowName, cowFile);
   console.log(await cowsay["cowsay(string,string)"](`I am a ${cowName}!`, cowName));
-  console.log(await cowsay["cowthink(string,string)"](`I am a ${cowName}!`, cowName));
+  console.log(await cowsay["cowthink(string,string)"](`I think I am a ${cowName}!`, cowName));    
+  
+  await cowsay.removeCowfile(cowName);
+  await cowsay.addCowfile(cowName, cowFile);
+  console.log(await cowsay.getCowfile(cowName));
 }

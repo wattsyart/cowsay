@@ -15,20 +15,41 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./CowLib.sol";
 
-
 /// @title Cowsay.sol
 /// @author Originally developed by Tony Monroe, ported to Solidity by @wattsyart (wattsyart@protonmail.com)
 /// @notice Outputs input text, as orated by an ASCII art cow, in 2022
 contract Cowsay is Ownable {
+    using CowLib for *;
 
-    mapping(string => string) public cows;
+    CowLib.CowMap private cows;
 
     /// @notice Adds a new custom cowfile to the contract
     /// @dev Example cowfiles are viewable at https://github.com/schacon/cowsay
-    /// @param name The lookup key for the new cowfile
+    /// @param name The name of the cowfile to add
     /// @param template The cowfile template text    
-    function setCow(string memory name, string memory template) external onlyOwner {
-        cows[name] = template;
+    function addCowfile(string memory name, string memory template) external onlyOwner returns (bool) {
+        return cows.add(name, template);
+    }
+
+    /// @notice Removes a custom cowfile from the contract
+    /// @param name The name of the cowfile to remove
+    function removeCowfile(string memory name) external onlyOwner returns (bool) {
+        return cows.remove(name);
+    }
+
+    /// @notice Gets a list of all available cows in this contract
+    function getCows() external view returns (string[] memory list) {
+        list = new string[](1 + cows.length());
+        list[0] = "default";
+        string[] memory names = cows.getNames();
+        for(uint i = 0; i < names.length; i++) {
+            list[i + 1] = names[i];
+        }
+    }
+
+    /// @notice Gets a specific cowfile by name
+    function getCowfile(string memory name) external view returns (string memory value) {
+        return cows.get(name);
     }
 
     /// @notice Cow says something, with all default values
@@ -53,7 +74,7 @@ contract Cowsay is Ownable {
     function cowsay(string memory input, string memory cowName) external view returns (string memory) {
         CowLib.Options memory options = getDefaultOptions();
         options.cowType = CowLib.CowType.Custom;
-        options.cowFile = cows[cowName];
+        options.cowFile = cows.get(cowName);
         options.bubbleType = CowLib.BubbleType.Say;
         return _cow(input, options);
     }
@@ -64,7 +85,7 @@ contract Cowsay is Ownable {
     /// @param options Options to customize the output (you must set all required options yourself)    
     function cowsay(string memory input, string memory cowName, CowLib.Options memory options) external view returns (string memory) {
         options.cowType = CowLib.CowType.Custom;
-        options.cowFile = cows[cowName];
+        options.cowFile = cows.get(cowName);
         options.bubbleType = CowLib.BubbleType.Say;
         return _cow(input, options);
     }
@@ -91,7 +112,7 @@ contract Cowsay is Ownable {
     function cowthink(string memory input, string memory cowName) external view returns (string memory) {
         CowLib.Options memory options = getDefaultOptions();
         options.cowType = CowLib.CowType.Custom;
-        options.cowFile = cows[cowName];
+        options.cowFile = cows.get(cowName);
         options.bubbleType = CowLib.BubbleType.Think;
         return _cow(input, options);
     }
@@ -102,7 +123,7 @@ contract Cowsay is Ownable {
     /// @param options Options to customize the output (you must set all required options yourself)
     function cowthink(string memory input, string memory cowName, CowLib.Options memory options) external view returns (string memory) {
         options.cowType = CowLib.CowType.Custom;
-        options.cowFile = cows[cowName];
+        options.cowFile = cows.get(cowName);
         options.bubbleType = CowLib.BubbleType.Think;
         return _cow(input, options);
     }
@@ -122,7 +143,7 @@ contract Cowsay is Ownable {
     /// @param options Options to customize the output (you must set all required options yourself)
     function cow(string memory input, string memory cowName, CowLib.Options memory options) external view returns (string memory) {
         options.cowType = CowLib.CowType.Custom;
-        options.cowFile = cows[cowName];
+        options.cowFile = cows.get(cowName);
         return _cow(input, options);
     }
 
