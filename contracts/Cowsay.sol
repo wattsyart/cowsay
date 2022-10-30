@@ -6,7 +6,7 @@ import "./CowLib.sol";
 
 contract Cowsay is Ownable {
 
-    mapping(string => string) cows;
+    mapping(string => string) public cows;
 
     function setCow(string memory name, string memory template) external onlyOwner {
         cows[name] = template;
